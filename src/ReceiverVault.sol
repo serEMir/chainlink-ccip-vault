@@ -67,6 +67,7 @@ contract ReceiverVault is Ownable {
 
     function withdrawToken(uint64 _destinationChainSelector, address _account, address _token, uint256 _amount)
         external
+        onlyTransporter
         returns (bytes32 messageId)
     {
         if (_amount <= 0) {

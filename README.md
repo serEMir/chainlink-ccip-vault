@@ -1,6 +1,15 @@
-# Cross-Chain Vault System
+# Cross Chain Vault system (powered by chainlink CCIP)
 
 A decentralized cross-chain vault system that enables users to deposit and withdraw tokens across different blockchain networks using Chainlink's Cross-Chain Interoperability Protocol (CCIP).
+
+## Table of Contents
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Contract Overview](#contract-overview)
+- [Available Commands](#available-commands)
+- [Configuration](#configuration)
+- [Security Features](#security-features)
+- [Dependencies](#dependencies)
 
 ## Quick Start
 
@@ -20,34 +29,88 @@ make dev-setup
 make setup-env        # Creates .env template
 ```
 
-## Components
-
-- `SenderVault`: Source chain vault, initiates transfers
-- `ReceiverVault`: Destination chain vault
-- `CCIPTransporter`: CCIP message handler
-
-## Commands
-
-```bash
-# Testing
-make test                        # Run all tests
-make test-match MATCH=<name>    # Run specific test
-
-# Local Development
-make anvil                      # Start local node
-make deploy-local              # Deploy contracts
-
-# Testnet Deployment
-make deploy-source RPC_URL=$SEPOLIA_RPC_URL
-make deploy-destination RPC_URL=$BASE_SEPOLIA_RPC_URL
-
-# Other
-make format                     # Format code
-make security                   # Run security checks
-make size                      # Show contract sizes
+## Project Structure
+```
+chainlink-ccip-vault/
+├── src/                    # Smart contract source files
+│   ├── CCIPTransporter.sol # CCIP message handling
+│   ├── ReceiverVault.sol   # Destination chain vault
+│   ├── SenderVault.sol     # Source chain vault
+│   ├── interfaces/         # Contract interfaces
+│   └── mocks/             # Mock contracts for testing
+├── script/                 # Deployment scripts
+├── test/                   # Test files
+├── foundry.toml           # Foundry configuration
+└── Makefile              # Build & deployment automation
 ```
 
-View all available commands with `make help`
+## Contract Overview
+
+### Core Contracts
+
+1. **SenderVault.sol**
+   - Source chain entry point
+   - Handles initial deposit requests
+   - Initiates cross-chain transfers
+   - Manages withdrawal requests
+   - CCIP fee handling in LINK tokens
+
+2. **ReceiverVault.sol**
+   - Destination chain vault
+   - Stores actual token balances
+   - Processes cross-chain deposits
+   - Handles withdrawal executions
+   - Maintains user token balances
+
+3. **CCIPTransporter.sol**
+   - CCIP message handler
+   - Manages cross-chain communication
+   - Validates messages and token transfers
+   - Ensures secure message routing
+   - Token mapping management
+
+### Deployment Scripts
+
+1. **DeployLocal.s.sol**
+   - Local development deployment
+   - Sets up complete system for testing
+
+2. **DeploySenderVault.s.sol**
+   - Deploys source chain components (Sepolia)
+   - Configures CCIP router and token mappings
+
+3. **DeployDestination.s.sol**
+   - Deploys destination chain components (Base Sepolia)
+   - Sets up vault and transporter contracts
+
+4. **HelperConfig.s.sol**
+   - Deployment configuration helper
+   - Network-specific settings
+   - Test configurations
+
+## Available Commands
+
+| Command | Description |
+|---------|------------|
+| `make dev-setup` | Complete development setup (env, install, build) |
+| `make dev-test` | Build and run all tests |
+| `make test` | Run all tests |
+| `make test-verbose` | Run tests with verbose output |
+| `make test-coverage` | Run tests with coverage report |
+| `make test-gas` | Run tests with gas reporting |
+| `make test-match MATCH=<pattern>` | Run specific test(s) |
+| `make format` | Format all Solidity files |
+| `make lint` | Run solhint linter |
+| `make deploy-local` | Deploy to local Anvil network |
+| `make deploy-source RPC_URL=<url>` | Deploy source contracts |
+| `make deploy-destination RPC_URL=<url>` | Deploy destination contracts |
+| `make anvil` | Start local Anvil instance |
+| `make anvil-fork-sepolia` | Start Anvil forked from Sepolia |
+| `make size` | Show contract sizes |
+| `make security` | Run Slither & Mythril analysis |
+| `make verify-sepolia` | Verify contracts on Sepolia |
+| `make verify-base-sepolia` | Verify contracts on Base Sepolia |
+
 
 ## Security Features
 

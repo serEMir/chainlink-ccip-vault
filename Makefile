@@ -1,4 +1,4 @@
-# Cross-Chain Vault System Makefile
+# Chainlink CCIP Vault Makefile
 # A comprehensive development automation tool for Chainlink CCIP vault system
 
 # Load environment variables from .env file
