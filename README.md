@@ -19,8 +19,8 @@ curl -L https://foundry.paradigm.xyz | bash
 foundryup
 
 # Clone the repository
-git clone https://github.com/serEMir/CCIPpoweredcrosschainvault.git
-cd chainlink
+git clone https://github.com/serEMir/chainlink-ccip-vault.git
+cd chainlink-ccip-vault
 
 # Install dependencies and build
 make dev-setup
