@@ -10,3 +10,8 @@ docs/
 
 # Dotenv file
 .env
+
+# Foundry installation files
+foundryup.sh
+foundryup-official.sh
+*fficial.sh*
