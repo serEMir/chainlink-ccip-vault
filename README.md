@@ -37,11 +37,12 @@ chainlink-ccip-vault/
 │   ├── ReceiverVault.sol   # Destination chain vault
 │   ├── SenderVault.sol     # Source chain vault
 │   ├── interfaces/         # Contract interfaces
-│   └── mocks/             # Mock contracts for testing
+│   └── mocks/              # Mock contracts for testing
 ├── script/                 # Deployment scripts
 ├── test/                   # Test files
-├── foundry.toml           # Foundry configuration
-└── Makefile              # Build & deployment automation
+├── LICENSE                 # License file
+├── foundry.toml            # Foundry configuration
+└── Makefile                # Build & deployment automation
 ```
 
 ## Contract Overview

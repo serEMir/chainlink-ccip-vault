@@ -327,7 +327,14 @@ contract VaultTestV2 is Test {
                 amountToDeposit1
             )
         );
+        vm.prank(address(ccipTransporter));
         receiverVault.withdrawToken(destinationChainSelector, USER1, address(ccipBnMToken), amountToDeposit1);
+    }
+
+    function testReceiverVaultRevertsTokenWithdrawalIfInvalidAmount() external {
+        vm.expectRevert(ReceiverVault.ReceiverVault__InvalidAmount.selector);
+        vm.prank(address(ccipTransporter));
+        receiverVault.withdrawToken(destinationChainSelector, USER1, address(ccipBnMToken), 0);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -384,5 +391,21 @@ contract VaultTestV2 is Test {
         vm.expectRevert(abi.encodeWithSelector(CCIPTransporter.CCIPTransporter__FunctionCallFailed.selector));
 
         testableCCIPTransporter.test_ccipRecieve(any2EvmMessage);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                             RECEIVER_VAULT
+    //////////////////////////////////////////////////////////////*/
+    function testReceiverVaultRevertsIfNotTransporter() external {
+        vm.expectRevert(abi.encodeWithSelector(ReceiverVault.ReceiverVault__OnlyTransporter.selector));
+        receiverVault.depositToken(USER1, address(ccipBnMToken), amountToDeposit1);
+    }
+
+    function testReceiverVaultReturnsUserTokenBalance() external {
+        vm.startPrank(address(ccipTransporter));
+        receiverVault.depositToken(USER1, address(ccipBnMToken), amountToDeposit1);
+        vm.stopPrank();
+        uint256 balance = receiverVault.getUserTokenBalance(USER1, address(ccipBnMToken));
+        assertEq(balance, amountToDeposit1);
     }
 }

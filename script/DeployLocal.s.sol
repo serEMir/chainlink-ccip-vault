@@ -11,27 +11,23 @@ import {CCIPTransporter} from "../src/CCIPTransporter.sol";
  * It uses hardcoded addresses for local Anvil network.
  */
 contract DeployLocal is Script {
-    // Local Anvil addresses (these are the default addresses when Anvil starts)
     address constant ROUTER_ADDRESS = 0x5FbDB2315678afecb367f032d93F642f64180aa3;
     address constant LINK_TOKEN = 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512;
+
 
     function run() public {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        // Deploy SenderVault
         SenderVault senderVault = new SenderVault(ROUTER_ADDRESS, LINK_TOKEN);
         console.log("SenderVault deployed to:", address(senderVault));
 
-        // Deploy CCIPTransporter
         CCIPTransporter ccipTransporter = new CCIPTransporter(ROUTER_ADDRESS);
         console.log("CCIPTransporter deployed to:", address(ccipTransporter));
 
-        // Deploy ReceiverVault
         ReceiverVault receiverVault = new ReceiverVault(LINK_TOKEN, ROUTER_ADDRESS);
         console.log("ReceiverVault deployed to:", address(receiverVault));
 
-        // Set the transporter in ReceiverVault
         receiverVault.setTransporter(address(ccipTransporter));
         console.log("ReceiverVault configured with CCIPTransporter");
 

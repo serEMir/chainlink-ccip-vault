@@ -2,12 +2,6 @@
 pragma solidity ^0.8.26;
 
 import {Script} from "forge-std/Script.sol";
-import {
-    IRouterClient,
-    LinkToken,
-    BurnMintERC677Helper,
-    CCIPLocalSimulator
-} from "../lib/chainlink-local/src/ccip/CCIPLocalSimulator.sol";
 
 abstract contract CodeConstants {
     uint256 public constant ETH_SEPOLIA_CHAIN_ID = 11155111;
@@ -30,9 +24,8 @@ contract HelperConfig is Script, CodeConstants {
     }
 
     function getConfigByChainId(uint256 chainId) public view returns (NetworkConfig memory) {
-        NetworkConfig memory config = networkConfigs[chainId];
-
         if (chainId == ETH_SEPOLIA_CHAIN_ID || chainId == BASE_SEPOLIA_CHAIN_ID) {
+            NetworkConfig memory config = networkConfigs[chainId];
             return config;
         } else {
             revert HelperConfig__InvalidChainId(chainId);
